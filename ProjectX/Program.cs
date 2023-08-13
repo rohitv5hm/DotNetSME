@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using ProjectX.Middlewares;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +20,22 @@ builder.Services.AddTransient<MultitenancyMiddleware>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Serilog logger
+builder.Host.UseSerilog((context, configuration) => { 
+    configuration.ReadFrom.Configuration(context.Configuration);
+});
+
+
+
+builder.Services.AddLogging(builder =>
+{
+    builder.AddConsole();  // Add console logger provider
+    builder.AddDebug();    // Add debug logger provider
+});
+
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -30,6 +47,8 @@ if (app.Environment.IsDevelopment())
 app.UseMiddleware<CustomMiddleware1>();
 app.UseMiddleware<CustomMiddleware2>();
 app.UseMiddleware<MultitenancyMiddleware>();
+
+app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 

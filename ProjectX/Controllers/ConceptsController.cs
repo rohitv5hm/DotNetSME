@@ -1,7 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ProjectX.Helper;
+using Serilog.Core;
 using System;
 using System.Collections;
+using System.Diagnostics.Eventing.Reader;
 using System.Threading;
 
 namespace ProjectX.Controllers
@@ -10,6 +13,13 @@ namespace ProjectX.Controllers
     [Route("[controller]")]
     public class ConceptsController : ControllerBase
     {
+        private ILogger<ConceptsController> _logger;
+
+        public ConceptsController(ILogger<ConceptsController> logger) 
+        { 
+            _logger = logger;
+        }
+
         [HttpGet("multithread")]
         public ActionResult Test()
         {
@@ -82,6 +92,22 @@ namespace ProjectX.Controllers
 
             return Ok();
 
+        }
+
+
+
+        [HttpGet("serilogTest")]
+        public ActionResult SerilogTest()
+        {
+            //Basic Logging
+            _logger.LogInformation("This is a log inside serilog test endpoint");
+
+            //Structured Logging
+            var book = "Twinkle";
+            var OrderNumber = 76238723;
+            _logger.LogInformation("Processing book {@book} , order number ={@OrderNumber}", book, OrderNumber);
+
+            return Ok("Info logged");    
         }
 
     }

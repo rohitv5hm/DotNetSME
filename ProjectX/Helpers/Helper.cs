@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace ProjectX.Helper
+namespace ProjectX.Helpers
 {
 
     public class Multi

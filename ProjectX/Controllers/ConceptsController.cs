@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using ProjectX.Helper;
+using ProjectX.Helpers;
 using Serilog.Core;
 using System;
 using System.Collections;
